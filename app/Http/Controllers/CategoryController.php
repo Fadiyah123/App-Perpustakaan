@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\categories;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,7 +13,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = categories::orderBy('id', 'DESC')->get();
+        $categories = Category::orderBy('id', 'DESC')->get();
         return view('admin.kategori.index', compact('categories'));
     }
 
@@ -30,7 +30,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        categories::create([
+        Category::create([
             'nama_kategori' => $request->nama_kategori,
         ]);
         return redirect('kategori/index');
@@ -49,7 +49,7 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        $category = categories::find($id);
+        $category = Category::find($id);
         return view('admin.kategori.edit', compact('category'));
     }
 
@@ -58,7 +58,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $category = categories::find($id);
+        $category = Category::find($id);
         $rules = [
             'nama_kategori' => ['required'],
         ];
@@ -78,7 +78,7 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $category = categories::find($id);
+        $category = Category::find($id);
         $category->delete();
         return redirect()->to('kategori/index');
 

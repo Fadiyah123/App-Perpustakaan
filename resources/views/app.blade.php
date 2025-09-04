@@ -86,82 +86,91 @@
     <!-- Template Main JS File -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
     <script>
-    let category = document.getElementById('id_kategori');
-    category.addEventListener('change', async function() {
-        const id_category = this.value; //artinya adalah selector id_category ingin mengambil value
-        const selectBuku = document.querySelector('#id_buku');
-        selectBuku.innerHTML = "<option value=''>Pilih Buku...</option>"
-        if(!category){
-            selectBuku.innerHTML = "<option value=''>Pilih Buku</option>"
-            return;
-        }
-        try {
-            const res = await fetch(`/get-buku/${id_category}`);
-            const data = await res.json();
-            data.data.forEach(buku => {
-                const option = document.createElement('option');
-                option.value = buku.id;
-                option.textContent = buku.judul;
-                selectBuku.appendChild(option);
-            })
-        } catch (error) {
-            console.log('error fetch buku', error);
-        }
-    });
+        let category = document.getElementById('id_kategori');
+        category.addEventListener('change', async function() {
+            const id_category = this.value; //artinya adalah selector id_category ingin mengambil value
+            const selectBuku = document.querySelector('#id_buku');
+            selectBuku.innerHTML = "<option value=''>Pilih Buku...</option>"
+            if (!category) {
+                selectBuku.innerHTML = "<option value=''>Pilih Buku</option>"
+                return;
+            }
+            try {
+                const res = await fetch(`/get-buku/${id_category}`);
+                const data = await res.json();
+                data.data.forEach(buku => {
+                    const option = document.createElement('option');
+                    option.value = buku.id;
+                    option.textContent = buku.judul;
+                    selectBuku.appendChild(option);
+                })
+            } catch (error) {
+                console.log('error fetch buku', error);
+            }
+        });
     </script>
 
     <script>
-    let count = 0;
-    
-    // document.querySelector('#addRow').addEventListener('click', function() {
-    //     const tbody = document.querySelector('#tableTrans tbody');
-    //     const selectBook = document.querySelector('#id_buku');
-    //     const bookName = selectBook.options[selectBook.selectedIndex]?.text || '';
+        let count = 1;
 
-    //     if (!selectBook.value) {
-    //         alert('Silahkan pilih buku terlebih dahulu!');
-    //         return;
-    //     }
-    //     count++;
-    //     const tr = document.createElement('tr');
-    //     const tdNo = document.createElement('td');
-    //     tdNo.textContent = count;
-    //     tr.appendChild(tdNo);
+        // document.querySelector('#addRow').addEventListener('click', function() {
+        //     const tbody = document.querySelector('#tableTrans tbody');
+        //     const selectBook = document.querySelector('#id_buku');
+        //     const bookName = selectBook.options[selectBook.selectedIndex]?.text || '';
 
-    //     const tdNama = document.createElement('td');
-    //     tdNama.textContent = bookName;
-    //     tr.appendChild(tdNama);
+        //     if (!selectBook.value) {
+        //         alert('Silahkan pilih buku terlebih dahulu!');
+        //         return;
+        //     }
+        //     count++;
+        //     const tr = document.createElement('tr');
+        //     const tdNo = document.createElement('td');
+        //     tdNo.textContent = count;
+        //     tr.appendChild(tdNo);
 
-    //     const tdAction = document.createElement('td');
-    //     const delBtn   = document.createElement('button');
-    //     delBtn.textContent = "Hapus";
-    //     tdAction.appendChild(delBtn);
-    //     tr.appendChild(tdAction);
+        //     const tdNama = document.createElement('td');
+        //     tdNama.textContent = bookName;
+        //     tr.appendChild(tdNama);
 
-    //     tbody.appendChild(tr);
-    // });
+        //     const tdAction = document.createElement('td');
+        //     const delBtn   = document.createElement('button');
+        //     delBtn.textContent = "Hapus";
+        //     tdAction.appendChild(delBtn);
+        //     tr.appendChild(tdAction);
 
-    document.getElementById('addRow').addEventListener('click', function() {
-        const tbody = document.querySelector('#tableTrans tbody');
-        const selectBook = document.getElementById('id_buku');
-        const idBook = selectBook.value;
-        const NameBook = selectBook.options[selectBook.selectedIndex]?.text || '';
+        //     tbody.appendChild(tr);
+        // });
 
-        if (!idBook) {
-            alert('Select buku terlebih dahulu!');
-            return;
-        }
+        document.getElementById('addRow').addEventListener('click', function() {
+            const tbody = document.querySelector('#tableTrans tbody');
+            const selectBook = document.getElementById('id_buku');
+            const idBook = selectBook.value;
+            const NameBook = selectBook.options[selectBook.selectedIndex]?.text || '';
 
-        const no = count++
-        // const no = tbody.querySelectorAll('tr').length + 1;
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
+            if (!idBook) {
+                alert('Select buku terlebih dahulu!');
+                return;
+            }
+
+            const no = count++
+            // const no = tbody.querySelectorAll('tr').length + 1;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
         <td>${no}</td>
-        <td>${NameBook}</td>
-        <td><button class='btn btn-danger'>Hapus</button></td>
-        `
-        tbody.appendChild(tr);
-    });
+        <td>${NameBook}<input type='hidden' name='id_buku[]' value=${idBook}></td>
+        <td><button type='button' class='btn btn-sm btn-danger delete-row'>Hapus</button></td>
+        `;
+            console.log(tr);
+
+            tbody.appendChild(tr);
+        });
+
+        document.querySelector('#tableTrans tbody').addEventListener('click', function(e) {
+            if (e.target.classList.contains('delete-row')) {
+                const tr = e.target.closest('tr');
+                if (tr) tr.remove();
+            }
+        });
     </script>
 
     <script>
