@@ -11,6 +11,7 @@ use App\Models\Category;
 use App\Models\DetailBorrows;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class TransactionController extends Controller
 {
@@ -58,23 +59,26 @@ class TransactionController extends Controller
                 'return_date' => $request->return_date,
                 'note'      => $request->note,
             ]);
-    
+
             foreach($request->id_buku as $key => $value) {
                 DetailBorrows::create([
                     'id_borrow' => $insertBorrow->id,
                     'id_book'   => $request->id_buku[$key],
                 ]);
             }
-            
+
             DB::commit();
-            return redirect()->to('print-peminjam', $insertBorrow->id);
+            Alert::success('Berhasil', 'Transaksi berhasil dibuat');
+            return redirect()->route('print-peminjam', ['id' => $insertBorrow->id]);
         } catch (Exception $th) {
-            return $th->getMessage();
             //throw $th;
             DB::rollBack();
-            return redirect()->to('create');
+            return $th->getMessage();
+            // Alert::error('Upsiee', $th->getMessage());
+
+            return redirect()->to('transaction');
         }
-        
+
     }
 
     /**
@@ -107,8 +111,12 @@ class TransactionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $borrow = Borrows::find($id);
+        $borrow->detailBorrows()->delete();
+        $borrow->delete();
+        return redirect()->to('transaction');
     }
+    
     public function getBukuByIdCategory($id_category)
     {
         try {
@@ -127,5 +135,35 @@ class TransactionController extends Controller
     {
         $borrow = Borrows::with('member', 'detailBorrows.book')->find($id_borrow);
         return view('admin.pinjam.print', compact('borrow'));
+    }
+
+    public function returnBook(Request $request, $id)
+    {
+        $borrow = Borrows::findOrFail($id); //404
+        // $borrow = Borrows::find($id); //blank
+
+        if(!$borrow->actual_return_date) {
+            $fine = 0;
+        }
+        
+        $returnDate = \Carbon\Carbon::parse($borrow->return_date);
+        $actualReturnDate = \Carbon\Carbon::parse($borrow->actual_return_date);
+
+        //lebih besar dari greaterThan()
+        //if($actualReturnDate-> $returnDate)
+        if($actualReturnDate->greaterThan($returnDate)){
+            //actualDate * total denda
+            $late = $returnDate->diffInDays($actualReturnDate);
+            $fine = $late * 15000;
+        }
+
+        $fine = 0;
+        $borrow->actual_return_date = now();
+        $borrow->actual_return_date = Carbon::now();
+        $borrow->fine = $fine;
+        $borrow->status = 0;
+        $borrow->save();
+        Alert::success('Berhasil', 'Buku berhasil dikembalikan');
+        return redirect()->to('transaction');
     }
 }

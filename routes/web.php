@@ -52,5 +52,6 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('transaction', \App\Http\Controllers\TransactionController::class);
     Route::get('get-buku/{id}', [\App\Http\Controllers\TransactionController::class, 'getBukuByIdCategory']);
-    Route::get('print-peminjam/{id}', [App\Http\Controllers\TransactionController::class, 'print']);
+    Route::get('print-peminjam/{id}', [App\Http\Controllers\TransactionController::class, 'print'])->name('print-peminjam');
+    Route::post('transaction/{id}/return', [App\Http\Controllers\TransactionController::class, 'returnBook'])->name('transaction.return');
 });

@@ -38,10 +38,12 @@
   * Updated: Apr 20 2024 with Bootstrap v5.3.3
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+    ======================================================== -->
 </head>
 
 <body>
+    @include('sweetalert::alert')
+
 
     <!-- ======= Header ======= -->
     @include('inc.header')
@@ -85,6 +87,8 @@
 
     <!-- Template Main JS File -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
+    @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
+
     <script>
         let category = document.getElementById('id_kategori');
         category.addEventListener('change', async function() {
