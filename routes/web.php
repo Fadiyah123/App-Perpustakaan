@@ -50,8 +50,12 @@ Route::middleware('auth')->group(function () {
     route::get('buku/edit/{id}', [\App\Http\Controllers\BookController::class, 'edit'])->name('buku.edit');
     route::put('buku/update/{id}', [\App\Http\Controllers\BookController::class, 'update'])->name('buku.update');
 
-    Route::resource('transaction', \App\Http\Controllers\TransactionController::class);
+    Route::resource('transaction', \App\Http\Controllers\TransactionController::class)->middleware('role:user');
     Route::get('get-buku/{id}', [\App\Http\Controllers\TransactionController::class, 'getBukuByIdCategory']);
     Route::get('print-peminjam/{id}', [App\Http\Controllers\TransactionController::class, 'print'])->name('print-peminjam');
     Route::post('transaction/{id}/return', [App\Http\Controllers\TransactionController::class, 'returnBook'])->name('transaction.return');
+    Route::resource('role', \App\Http\Controllers\RoleController::class);
+    Route::resource('user', \App\Http\Controllers\UserController::class);
+    Route::get('user/{id}/roles', [\App\Http\Controllers\UserController::class, 'editRole'])->name('user.roles');
+    Route::post('user/{id}/updateRoles', [\App\Http\Controllers\UserController::class, 'updateRoles'])->name('user.updateRoles');
 });

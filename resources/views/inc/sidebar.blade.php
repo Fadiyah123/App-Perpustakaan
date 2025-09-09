@@ -8,7 +8,7 @@
                 <span>Dashboard</span>
             </a>
         </li><!-- End Dashboard Nav -->
-
+        @if (auth()->user()->hasRole('administrasi'))
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-menu-button-wide"></i><span>Master Data</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -34,8 +34,20 @@
                         <i class="bi bi-circle"></i><span>Buku</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('role.index') }}">
+                        <i class="bi bi-circle"></i><span>Role</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('user.index') }}">
+                        <i class="bi bi-circle"></i><span>User</span>
+                    </a>
+                </li>
             </ul>
         </li>
+        @endif
+        @if(auth()->user()->hasAnyRole(['Administrasi', 'user']))
         <!-- End Components Nav -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="{{ route('transaction.index') }}">
@@ -43,6 +55,7 @@
                 <span>Pinjam Buku</span>
             </a>
         </li>
+        @endif
         {{-- <!-- End Profile Page Nav -->
 
         <li class="nav-item">

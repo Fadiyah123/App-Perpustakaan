@@ -24,7 +24,7 @@ class HomeController extends Controller
         $notReturnBooks = Borrows::where('status', 1)->whereNotNull('actual_return_date')->count();
 
         $fines = Borrows::with('member')->where('fine', '>', 0)->get();
-        $totalfines = Borrows::sum('fine');
+        $totalFines = Borrows::sum('fine');
         return view('admin.dashboard', compact('totalBooks', 'totalStock', 'borrowedBooks', 'returnBooks', 'notReturnBooks', 'fines', 'totalFines'));
     }
 }

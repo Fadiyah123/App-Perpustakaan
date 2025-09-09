@@ -1,10 +1,10 @@
 @extends('app')
-@section('title', 'Edit Category')
+@section('title', 'Ubah Role')
 @section('content')
 
     <div class="card">
         <div class="card-header">
-            <div class="card-title">Edit Kategori</div>
+            <div class="card-title">Ubah Role</div>
         </div>
         <div class="card-body">
             {{-- buat debugging --}}
@@ -16,14 +16,14 @@
                 </ul>
             </div>
             {{-- akhir debugging --}}
-            <form action="{{ route('kategori.update', $category->id) }}" method="post">
+            <form action="{{ route('role.update', $edit->id) }}" method="post">
                 @csrf
                 @method('PUT')
-                <label for="" class="form-label">Nama Kategori</label>
-                <input type="text" class="form-control" name="nama_kategori" value="{{ $category->nama_kategori }}">
+                <label for="" class="form-label">Nama</label>
+                <input type="text" class="form-control" name="name" value="{{ $edit->name }}">
 
-
-                <button type="submit" class="btn btn-primary mt-2">Kirim</button>
+                <button type="submit" class="btn btn-primary mt-2">Simpan</button>
+                <a href="{{ url()->previous() }}" class="btn btn-success">Kembali</a>
             </form>
         </div>
     </div>

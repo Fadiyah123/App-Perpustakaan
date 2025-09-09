@@ -37,7 +37,7 @@
                                 <a href="{{ route('transaction.show', $borrow->id) }}"  class="btn btn-success btn-sm">
                                     <i class="bi bi-eye"></i>
                                 </a>
-                                <form action="{{ route('transaction.destroy', $borrow->id)}}" method="post" class="d-inline"> 
+                                <form action="{{ route('transaction.destroy', $borrow->id)}}" method="post" class="d-inline">
                                     @method('DELETE')
                                     @csrf
                                     <button type="submit" class="btn btn-danger btn-sm">
@@ -51,6 +51,7 @@
                                         Kembalikan
                                     </button>
                                 </form>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
